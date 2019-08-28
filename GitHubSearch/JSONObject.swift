@@ -64,7 +64,7 @@ protocol JSONValueConverter {
     associatedtype FromType
     associatedtype ToType
     
-    func convert(key : String, value: FromType) throws -> ToType
+    func convert(key key : String, value: FromType) throws -> ToType
 }
 
 /**
@@ -74,7 +74,7 @@ struct DefaultConverter<T>: JSONValueConverter {
     typealias FromType = T
     typealias ToType = T
     
-    func convert(key: String, value: FromType) -> DefaultConverter.ToType {
+    func convert(key key: String, value: FromType) -> DefaultConverter.ToType {
         return value
     }
 }
@@ -86,7 +86,7 @@ struct ObjectConverter<T: JSONDecodable>: JSONValueConverter {
     typealias FromType = [String: AnyObject]
     typealias ToType = T
     
-    func convert(key: String, value: FromType) throws -> ObjectConverter.ToType {
+    func convert(key key: String, value: FromType) throws -> ObjectConverter.ToType {
         return try T(JSON: JSONObject(JSON: value))
     }
 }
@@ -98,7 +98,7 @@ struct ArrayConverter<T: JSONDecodable>: JSONValueConverter {
     typealias FromType = [[String: AnyObject]]
     typealias ToType = [T]
     
-    func convert(key: String, value: FromType) throws -> ArrayConverter.ToType {
+    func convert(key key: String, value: FromType) throws -> ArrayConverter.ToType {
         return try value.map(JSONObject.init).map(T.init)
     }
 }

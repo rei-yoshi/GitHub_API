@@ -92,38 +92,15 @@ struct SearchResult<ItemType: JSONDecodable>: JSONDecodable {
 }
 
 
-//各パラメータを宣言し、イニシャライザを使用して初期化
-
-struct Comment: JSONDecodable {
-    let id: Int
-    let url: URL
-    let html_url: URL
-    let body: String
-   // let user: User
-    let created_at: Date
-    let updated_at: Date
-    
-    init(JSON: JSONObject) throws {
-        self.id = try JSON.get(key:"id")
-        self.url = try JSON.get(url)
-        self.html_url = try JSON.get(key :"html_url")
-        self.body = try JSON.get(key :"body")
-        self.user = try JSON.get(key :"user")
-        self.created_at = try JSON.get(key :"created_at", converter: FormattedDateConverter(dateFormatter: dateFormatter))
-        self.updated_at = try JSON.get(key :"updated_at", converter: FormattedDateConverter(dateFormatter: dateFormatter))
-    }
-}
-
-
+//issuesを検索する時に必要になるデータの取得、イニシャライザを使用して初期化
 
 
 struct Issue : JSONDecodable {
-    let URL:URL
-    let repository_url:URL
+    let URL:NSURL
     let labels_url:String
-    let comments_url:URL
-    let events_url:URL
-    let html_url:URL
+    let comments_url:NSURL
+    let events_url:NSURL
+    let html_url:NSURL
     let id:Int
     let node_id:Int
     let number :Int
@@ -133,13 +110,18 @@ struct Issue : JSONDecodable {
     let avatar_id:String
     
     init(JSON : JSONObject) throws {
-        self.URL = try JSON.get(key : "URL")
-        self.repository_url=try JSON.get("")
-        
+        self.URL = try JSON.get(key: "url")
+        self.labels_url = try JSON.get(key: "labels_url")
+        self.comments_url = try JSON.get(key: "comments_url")
+        self.events_url = try JSON.get(key : "events_url")
+        self.html_url = try JSON.get(key :"html_url")
+        self.id = try JSON.get(key : "id")
+        self.node_id = try JSON.get(key:"node_id")
+        self.number = try JSON.get(key : "number")
+        self.title = try JSON.get(key : "title")
+        self.login = try JSON.get(key : "login")
+        self.avatar_id = try JSON.get(key : "avatar_id")
     }
-    
-    
-    
 }
 
 
