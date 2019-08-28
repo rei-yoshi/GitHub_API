@@ -17,6 +17,7 @@
 		1901459523151AB00023ECAC /* GitHubSearchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1901459423151AB00023ECAC /* GitHubSearchUITests.swift */; };
 		1945FEE9231618D300D767B2 /* JSONObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945FEE8231618D300D767B2 /* JSONObject.swift */; };
 		1945FEEB23161BCA00D767B2 /* GitHubAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945FEEA23161BCA00D767B2 /* GitHubAPI.swift */; };
+		1945FEED2316494700D767B2 /* GitHub_URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1945FEEC2316494700D767B2 /* GitHub_URL.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		1901459623151AB00023ECAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1945FEE8231618D300D767B2 /* JSONObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONObject.swift; sourceTree = "<group>"; };
 		1945FEEA23161BCA00D767B2 /* GitHubAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAPI.swift; sourceTree = "<group>"; };
+		1945FEEC2316494700D767B2 /* GitHub_URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHub_URL.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 				1901457D23151AB00023ECAC /* LaunchScreen.storyboard */,
 				1901458023151AB00023ECAC /* Info.plist */,
 				1945FEEA23161BCA00D767B2 /* GitHubAPI.swift */,
+				1945FEEC2316494700D767B2 /* GitHub_URL.swift */,
 			);
 			path = GitHubSearch;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 			files = (
 				1945FEE9231618D300D767B2 /* JSONObject.swift in Sources */,
 				1901457723151AAE0023ECAC /* DetailViewController.swift in Sources */,
+				1945FEED2316494700D767B2 /* GitHub_URL.swift in Sources */,
 				1901457523151AAE0023ECAC /* MasterViewController.swift in Sources */,
 				1945FEEB23161BCA00D767B2 /* GitHubAPI.swift in Sources */,
 				1901457323151AAE0023ECAC /* AppDelegate.swift in Sources */,

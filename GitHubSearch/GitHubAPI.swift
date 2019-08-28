@@ -14,58 +14,87 @@ enum APIError:Error {
     case EmptyBody
     case UnexpectedResponseType
 }
-enum HTTPMeehod: String {
+enum APIResult<Response>{
+    case Success(Response)
+    case Failure(Error)
+}
+
+enum HTTPMethod: String {
     case OPIONS
     case GET
     case HEAD
     case PUT
-    case 
+    case DELETE
+    case TRACE
+    case CONNECT
 }
 
-struct JSONObject {
-    
-    let JSON: [String: AnyObject]
-    
-    func get<T>(key: String) throws -> T {
-        guard let value = JSON[key] else {
-            throw JSONDecodeError.MissingRequiredKey(key)
-        }
-        guard let typedValue = value as? T else {
-            throw JSONDecodeError.UnexpectedType(key: key, expected: T, actual: value.dynamicType)
-        }
-        return typedValue
+protocol APIEndpoint {
+    var URL:NSURL { get }
+    var method : HTTPMethod { get }
+    var query  : Parameters? { get }
+    var headers : Parameters? { get }
+    associatedtype ResponseType : JSONDecodable
+}
+
+extension APIEndpoint {
+    var method: HTTPMethod {
+        return .GET
     }
-    
-}
-
-struct User {
-    let login: String
-    let id: Int
-    let avatarURL: NSURL
-    let gravatarID: String
-    let URL: NSURL
-    let receivedEventsURL: NSURL
-    let type: String
-}
-
-init (JSON:JSONObject) {
-    guard
-        self.login = JSON["login"] as? String,
-        self.id = JSON["id"] as? Int,
-        self.avatarURL = (JSON["avatar_url"] as? String).flatMap(NSURL.init(string:)),
-        self.gravatarID = JSON["gravatar_id"] as? String,
-        self.URL = (JSON["url"] as? String).flatMap(NSURL.init(string:)),
-        self.receivedEventsURL = (JSON["received_events_url"] as? String).flatMap(NSURL.init(string:)),
-        let type = JSON["type"] as? String
-        else{
-            return ()
+    var query: Parameters? {
+        return nil
     }
+    var headers: Parameters? {
+        return nil
+    }
+}
+
+
+
+extension APIEndpoint {
+    private var URLRequest: NSURLRequest {
+        let components = NSURLComponents(url: URL as URL, resolvingAgainstBaseURL: true)
+        components?.queryItems = query?.parameters.map(NSURLQueryItem.init) as [URLQueryItem]?
+        let req = NSMutableURLRequest(url: components?.url ?? URL as URL)
+        req.httpMethod = method.rawValue
+        for case let (key, value?) in headers?.parameters ?? [:] {
+            req.addValue(value, forHTTPHeaderField: key)
+        }
+        return req
+    }
+    func request(session: URLSession, callback: @escaping (APIResult<ResponseType>) -> Void) ->
+        URLSessionDataTask {
+            let task = session.dataTask(with: URLRequest as URLRequest) { (data, response, error) in
+                if let e = error {
+                    callback(.Failure(e))
+                } else if let data = data {
+                    do {
+                        guard let dic = try JSONSerialization.jsonObject(with: data, options: [])
+                            as? [String: AnyObject] else {
+                                throw APIError.UnexpectedResponseType
+                        }
+                        let response = try ResponseType(JSON: JSONObject(JSON: dic))
+                        callback(.Success(response))
+                    } catch {
+                        callback(.Failure(error))
+                    }
+                } else {
+                    callback(.Failure(APIError.EmptyBody))
+                }
+            }
+            task.resume()
+            return task
+    }
+}
+
+struct Parameters: ExpressibleByDictionaryLiteral {
+    typealias Key = String
+    typealias Value = String?
+    private(set) var parameters: [Key: Value] = [:]
     
-    self.login = login
-    self.id = id
-    self.avatarURL = avatarURL
-    self.gravatarID = gravatarID
-    self.URL = URL
-    self.receivedEventsURL = receivedEventsURL
-    self.type = type
+    init(dictionaryLiteral elements: (Parameters.Key, Parameters.Value)...) {
+        for case let (key, value?) in elements {
+            parameters[key] = value
+        }
+    }
 }
